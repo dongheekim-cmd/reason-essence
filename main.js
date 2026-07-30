@@ -178,13 +178,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function buildPreviewPages(b) {
-    const manuscriptPreview =
-      typeof BOOK_PREVIEWS !== "undefined" && BOOK_PREVIEWS[b.id]
-        ? BOOK_PREVIEWS[b.id]
-        : b.preview;
-
-    if (Array.isArray(manuscriptPreview) && manuscriptPreview.length) {
-      return manuscriptPreview.map((item, index) => ({
+    if (Array.isArray(b.preview) && b.preview.length) {
+      return b.preview.map((item, index) => ({
         label: item.label || `미리보기 ${index + 1}`,
         title: item.title || b.title,
         html: (item.paragraphs || []).map((paragraph) => `<p>${paragraph}</p>`).join("")
