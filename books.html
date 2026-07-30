@@ -45,11 +45,17 @@
 
 <section>
   <div class="wrap">
-    <div class="filter-bar">
-      <button data-filter="all" class="active">전체</button>
-      <button data-filter="과학">과학</button>
-      <button data-filter="철학">철학</button>
-      <button data-filter="인문교양">인문교양</button>
+    <div class="list-controls">
+      <div class="filter-bar">
+        <button data-filter="all" class="active">전체</button>
+        <button data-filter="과학">과학</button>
+        <button data-filter="철학">철학</button>
+        <button data-filter="인문교양">인문교양</button>
+      </div>
+      <div class="view-toggle">
+        <button data-view="grid" class="active" aria-label="진열형 보기" title="진열형 보기">▦ 진열형</button>
+        <button data-view="list" aria-label="목록형 보기" title="목록형 보기">≡ 목록형</button>
+      </div>
     </div>
     <div class="book-grid" id="book-grid"></div>
   </div>
