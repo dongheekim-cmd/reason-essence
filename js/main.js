@@ -27,9 +27,31 @@ document.addEventListener("DOMContentLoaded", () => {
     featuredEl.innerHTML = featured.map(bookCardHTML).join("");
   }
 
-  /* 도서목록 페이지 — 전체 렌더링 + 필터 */
+  /* 도서목록 페이지 — 전체 렌더링 + 필터 + 보기 전환(진열형/목록형) */
   const gridEl = document.getElementById("book-grid");
+  let currentList = typeof BOOKS !== "undefined" ? BOOKS : [];
+  let viewMode = "grid";
+  try {
+    viewMode = localStorage.getItem("re_book_view") || "grid";
+  } catch (e) {}
+
   if (gridEl && typeof BOOKS !== "undefined") {
+    const viewBtns = document.querySelectorAll(".view-toggle button");
+    if (viewBtns.length) {
+      viewBtns.forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.view === viewMode);
+        btn.addEventListener("click", () => {
+          viewMode = btn.dataset.view;
+          viewBtns.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          try {
+            localStorage.setItem("re_book_view", viewMode);
+          } catch (e) {}
+          renderGrid(currentList);
+        });
+      });
+    }
+
     renderGrid(BOOKS);
 
     const filterBtns = document.querySelectorAll(".filter-bar button");
@@ -38,8 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
         filterBtns.forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
         const cat = btn.dataset.filter;
-        const list = cat === "all" ? BOOKS : BOOKS.filter((b) => b.category === cat);
-        renderGrid(list);
+        currentList = cat === "all" ? BOOKS : BOOKS.filter((b) => b.category === cat);
+        renderGrid(currentList);
       });
     });
   }
@@ -51,7 +73,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderGrid(list) {
-    gridEl.innerHTML = list.map(bookCardHTML).join("");
+    if (viewMode === "list") {
+      gridEl.className = "book-list";
+      gridEl.innerHTML = list.map(bookRowHTML).join("");
+    } else {
+      gridEl.className = "book-grid";
+      gridEl.innerHTML = list.map(bookCardHTML).join("");
+    }
   }
 
   function coverSrc(b) {
@@ -64,6 +92,21 @@ document.addEventListener("DOMContentLoaded", () => {
         <article class="book-card">
           <div class="cover"><img src="${coverSrc(b)}" alt="${b.title} 표지" loading="lazy"></div>
           <div class="meta">
+            <div class="status">${b.status}</div>
+            <h3>${b.title}</h3>
+            <div class="subtitle">${b.subtitle}</div>
+            <p class="desc">${b.desc}</p>
+          </div>
+        </article>
+      </a>`;
+  }
+
+  function bookRowHTML(b) {
+    return `
+      <a class="book-row-link" href="book.html?id=${b.id}">
+        <article class="book-row">
+          <div class="cover"><img src="${coverSrc(b)}" alt="${b.title} 표지" loading="lazy"></div>
+          <div class="info">
             <div class="status">${b.status}</div>
             <h3>${b.title}</h3>
             <div class="subtitle">${b.subtitle}</div>
