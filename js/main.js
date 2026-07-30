@@ -102,6 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return `<div class="toc-part">${section.part ? `<h3 class="toc-part-title">${section.part}</h3>` : ""}${list}</div>`;
       })
       .join("");
+    const previewPages = buildPreviewPages(b);
 
     detailEl.innerHTML = `
       <div class="detail-top">
@@ -114,6 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <h1>${b.title}</h1>
           <div class="subtitle">${b.subtitle}</div>
           <p class="desc">${b.desc}</p>
+          <button type="button" class="btn preview-open" id="preview-open">책 미리보기</button>
         </div>
       </div>
 
@@ -140,6 +142,158 @@ document.addEventListener("DOMContentLoaded", () => {
 
       <div style="text-align:center; margin-top:56px;">
         <a href="books.html" class="btn">← 도서목록으로 돌아가기</a>
+      </div>
+
+      <div class="preview-modal" id="preview-modal" aria-hidden="true">
+        <div class="preview-backdrop" data-preview-close></div>
+        <section class="preview-reader" role="dialog" aria-modal="true" aria-labelledby="preview-title">
+          <header class="preview-header">
+            <div>
+              <span class="preview-kicker">BOOK PREVIEW</span>
+              <h2 id="preview-title">${b.title}</h2>
+            </div>
+            <div class="preview-tools">
+              <button type="button" class="preview-tool" id="preview-font-down" aria-label="글자 작게">가−</button>
+              <button type="button" class="preview-tool" id="preview-font-up" aria-label="글자 크게">가+</button>
+              <button type="button" class="preview-close" data-preview-close aria-label="미리보기 닫기">×</button>
+            </div>
+          </header>
+          <div class="preview-body">
+            <aside class="preview-book">
+              <img src="${coverSrc(b)}" alt="${b.title} 표지">
+              <strong>${b.title}</strong>
+              <span>${b.subtitle}</span>
+            </aside>
+            <article class="preview-page" id="preview-page" tabindex="0"></article>
+          </div>
+          <footer class="preview-footer">
+            <button type="button" class="preview-nav" id="preview-prev">← 이전</button>
+            <span id="preview-progress" aria-live="polite"></span>
+            <button type="button" class="preview-nav" id="preview-next">다음 →</button>
+          </footer>
+        </section>
       </div>`;
+
+    setupPreview(previewPages);
+  }
+
+  function buildPreviewPages(b) {
+    if (Array.isArray(b.preview) && b.preview.length) {
+      return b.preview.map((item, index) => ({
+        label: item.label || `미리보기 ${index + 1}`,
+        title: item.title || b.title,
+        html: (item.paragraphs || []).map((paragraph) => `<p>${paragraph}</p>`).join("")
+      }));
+    }
+
+    const toc = b.toc || [];
+    const firstSection = toc.find((section) => (section.chapters || []).length) || {};
+    const sampleChapters = (firstSection.chapters || []).slice(0, 5);
+
+    return [
+      {
+        label: "책을 열며",
+        title: b.subtitle || b.title,
+        html: `
+          <p class="preview-lead">${b.desc}</p>
+          <p>${b.intent || "이 책의 미리보기 원고는 출간 준비와 함께 순차적으로 공개됩니다."}</p>
+          <p class="preview-note">이 미리보기는 출간 전 편집 과정에 따라 달라질 수 있습니다.</p>`
+      },
+      {
+        label: "이 책의 독자",
+        title: "이런 독자에게 권합니다",
+        html: `
+          <p>${b.audience || "이 책의 주제에 관심 있는 모든 독자를 위한 교양서입니다."}</p>
+          <blockquote>${b.desc}</blockquote>`
+      },
+      {
+        label: "목차 미리보기",
+        title: firstSection.part || "차례",
+        html: sampleChapters.length
+          ? `<ol>${sampleChapters.map((chapter) => `<li>${chapter}</li>`).join("")}</ol>
+             <p class="preview-note">전체 목차는 상세 페이지 아래에서 확인할 수 있습니다.</p>`
+          : `<p>목차는 출간 준비 중 순차적으로 공개됩니다.</p>`
+      }
+    ];
+  }
+
+  function setupPreview(pages) {
+    const modal = document.getElementById("preview-modal");
+    const openButton = document.getElementById("preview-open");
+    const page = document.getElementById("preview-page");
+    const progress = document.getElementById("preview-progress");
+    const prev = document.getElementById("preview-prev");
+    const next = document.getElementById("preview-next");
+    const fontDown = document.getElementById("preview-font-down");
+    const fontUp = document.getElementById("preview-font-up");
+    let pageIndex = 0;
+    let fontScale = 1;
+
+    if (!modal || !openButton || !page) return;
+
+    const renderPage = () => {
+      const current = pages[pageIndex];
+      page.innerHTML = `
+        <span class="preview-page-label">${current.label}</span>
+        <h3>${current.title}</h3>
+        <div class="preview-copy">${current.html}</div>`;
+      page.style.setProperty("--preview-font-scale", fontScale);
+      progress.textContent = `${pageIndex + 1} / ${pages.length}`;
+      prev.disabled = pageIndex === 0;
+      next.disabled = pageIndex === pages.length - 1;
+      page.scrollTop = 0;
+    };
+
+    const openPreview = () => {
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("preview-lock");
+      renderPage();
+      page.focus();
+    };
+
+    const closePreview = () => {
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("preview-lock");
+      openButton.focus();
+    };
+
+    openButton.addEventListener("click", openPreview);
+    modal.querySelectorAll("[data-preview-close]").forEach((button) => {
+      button.addEventListener("click", closePreview);
+    });
+    prev.addEventListener("click", () => {
+      if (pageIndex > 0) {
+        pageIndex -= 1;
+        renderPage();
+      }
+    });
+    next.addEventListener("click", () => {
+      if (pageIndex < pages.length - 1) {
+        pageIndex += 1;
+        renderPage();
+      }
+    });
+    fontDown.addEventListener("click", () => {
+      fontScale = Math.max(0.85, +(fontScale - 0.1).toFixed(2));
+      renderPage();
+    });
+    fontUp.addEventListener("click", () => {
+      fontScale = Math.min(1.4, +(fontScale + 0.1).toFixed(2));
+      renderPage();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (!modal.classList.contains("open")) return;
+      if (event.key === "Escape") closePreview();
+      if (event.key === "ArrowLeft" && pageIndex > 0) {
+        pageIndex -= 1;
+        renderPage();
+      }
+      if (event.key === "ArrowRight" && pageIndex < pages.length - 1) {
+        pageIndex += 1;
+        renderPage();
+      }
+    });
   }
 });
