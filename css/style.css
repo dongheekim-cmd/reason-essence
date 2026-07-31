@@ -84,10 +84,12 @@ p { margin: 0 0 1em; }
 }
 
 .brand img {
-  height: 42px;
-  width: 42px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  height: 46px;
+  width: auto;
+}
+
+@media (max-width: 460px) {
+  .brand img { height: 36px; }
 }
 
 .brand-text {
