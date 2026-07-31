@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
     detailEl.innerHTML = `
       <div class="detail-top">
         <div class="detail-cover">
-          <img src="${coverSrc(b)}" alt="${b.title} 표지">
+          <img src="${coverSrc(b)}" alt="${b.title} 표지" id="cover-zoom-trigger" tabindex="0" role="button" aria-label="표지 원본 크기로 보기">
         </div>
         <div class="detail-info">
           <span class="pill">${b.category}</span>
@@ -187,6 +187,14 @@ document.addEventListener("DOMContentLoaded", () => {
         <a href="books.html" class="btn">← 도서목록으로 돌아가기</a>
       </div>
 
+      <div class="cover-lightbox" id="cover-lightbox" aria-hidden="true">
+        <div class="cover-lightbox-backdrop" data-cover-close></div>
+        <div class="cover-lightbox-inner">
+          <button type="button" class="cover-lightbox-close" data-cover-close aria-label="닫기">×</button>
+          <img src="${coverSrc(b)}" alt="${b.title} 표지 원본" data-cover-close>
+        </div>
+      </div>
+
       <div class="preview-modal" id="preview-modal" aria-hidden="true">
         <div class="preview-backdrop" data-preview-close></div>
         <section class="preview-reader" role="dialog" aria-modal="true" aria-labelledby="preview-title">
@@ -218,6 +226,39 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>`;
 
     setupPreview(previewPages);
+    setupCoverZoom();
+  }
+
+  function setupCoverZoom() {
+    const trigger = document.getElementById("cover-zoom-trigger");
+    const lightbox = document.getElementById("cover-lightbox");
+    if (!trigger || !lightbox) return;
+
+    const openLightbox = () => {
+      lightbox.classList.add("open");
+      lightbox.setAttribute("aria-hidden", "false");
+      document.body.classList.add("preview-lock");
+    };
+    const closeLightbox = () => {
+      lightbox.classList.remove("open");
+      lightbox.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("preview-lock");
+      trigger.focus();
+    };
+
+    trigger.addEventListener("click", openLightbox);
+    trigger.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openLightbox();
+      }
+    });
+    lightbox.querySelectorAll("[data-cover-close]").forEach((el) => {
+      el.addEventListener("click", closeLightbox);
+    });
+    document.addEventListener("keydown", (event) => {
+      if (lightbox.classList.contains("open") && event.key === "Escape") closeLightbox();
+    });
   }
 
   function buildPreviewPages(b) {
