@@ -6,8 +6,15 @@ document.addEventListener("DOMContentLoaded", () => {
   /* 로고 / 파비콘 적용 */
   if (typeof LOGO_ICON !== "undefined") {
     document.querySelectorAll(".site-logo").forEach((img) => (img.src = LOGO_ICON));
-    const favicon = document.getElementById("favicon-link");
-    if (favicon) favicon.href = LOGO_ICON;
+  }
+  const favicon = document.getElementById("favicon-link");
+  if (favicon) {
+    favicon.href =
+      typeof FAVICON_ICON !== "undefined"
+        ? FAVICON_ICON
+        : typeof LOGO_ICON !== "undefined"
+        ? LOGO_ICON
+        : favicon.href;
   }
 
   /* 모바일 내비게이션 토글 */
