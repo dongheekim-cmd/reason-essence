@@ -711,6 +711,12 @@ section { padding: 88px 0; }
 
 /* ---------- Footer ---------- */
 
+.footer-domain {
+  flex-basis: 100%;
+  text-align: center;
+  margin-top: 4px;
+}
+
 .site-footer {
   background: var(--color-navy);
   color: rgba(255,255,255,0.55);
