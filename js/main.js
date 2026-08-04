@@ -90,6 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function coverSrc(b) {
+    if (b.image) return b.image;
     return typeof BOOK_IMAGES !== "undefined" && BOOK_IMAGES[b.id] ? BOOK_IMAGES[b.id] : "";
   }
 
