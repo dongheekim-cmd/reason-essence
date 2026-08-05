@@ -1,0 +1,19 @@
+『칸트는 왜 뉴턴을 필요로 했는가』 웹페이지 교체 파일
+
+1. ZIP 파일을 풉니다.
+2. 압축을 풀었을 때 보이는 author.html, js 폴더, images 폴더를
+   GitHub의 reason-essence 저장소 최상위에 올립니다.
+3. 같은 이름의 기존 파일은 Replace files로 덮어씁니다.
+4. images/books/kant-needs-newton.webp가 새로 추가되었는지 확인합니다.
+5. Commit changes를 누릅니다.
+6. GitHub Pages 반영 후 웹페이지에서 Ctrl+F5로 새로고침합니다.
+
+수정·추가된 파일
+- author.html
+- js/books-data.js
+- js/books-images.js
+- images/books/kant-needs-newton.webp
+
+주의
+- site 폴더 자체를 올리지 마세요.
+- 위 파일과 js·images 폴더를 저장소 최상위에 올리세요.
