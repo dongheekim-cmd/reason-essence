@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
   /* 홈 화면 — 대표 도서 4권 렌더링 */
   const featuredEl = document.getElementById("featured-books");
   if (featuredEl && typeof BOOKS !== "undefined") {
-    const featuredIds = ["world-essence", "wandering", "questioning-machine", "boundary-science"];
+    const featuredIds = ["wandering", "questioning-machine", "universe-pocket", "star-calculation"];
     const featured = featuredIds
       .map((id) => BOOKS.find((b) => b.id === id))
       .filter(Boolean);
