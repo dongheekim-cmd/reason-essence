@@ -1,4 +1,4 @@
-『칸트는 왜 뉴턴을 필요로 했는가』 웹페이지 교체 파일
+『칸트는 왜 뉴턴을 필요로 했는가』 및 홈페이지 대표 도서 교체 파일
 
 1. ZIP 파일을 풉니다.
 2. 압축을 풀었을 때 보이는 author.html, js 폴더, images 폴더를
@@ -12,7 +12,14 @@
 - author.html
 - js/books-data.js
 - js/books-images.js
+- js/main.js
 - images/books/kant-needs-newton.webp
+
+홈페이지 대표 도서 순서
+1. 끝나지 않는 방랑
+2. 존재를 묻는 기계
+3. 주머니 속의 우주
+4. 칸트는 왜 뉴턴을 필요로 했는가
 
 주의
 - site 폴더 자체를 올리지 마세요.
