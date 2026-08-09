@@ -1,19 +1,33 @@
-『왜 동양은 과학을 낳지 못했는가』 도서목록 등록 파일
+reason-essence.com 도서목록 표지 4권 교체 파일
 
-1. ZIP 파일을 풉니다.
-2. 압축을 풀었을 때 보이는 파일과 폴더를 GitHub 저장소 최상위에 올립니다.
-3. 같은 이름의 기존 파일은 Replace files로 덮어씁니다.
-4. images/books 폴더가 새로 추가되어야 합니다.
-5. Commit changes를 누릅니다.
-6. GitHub Pages 반영 후 Ctrl+F5로 새로고침합니다.
+교체 대상
+1. 경계선을 넘나드는 자연과학
+2. 세계는 본질이 있는가
+3. 주머니 속의 우주
+4. 철학자의 인생 매뉴얼
 
-업로드 대상
-- book.html
-- books.html
+업로드 방법
+1. 이 ZIP 파일을 풉니다.
+2. 압축을 풀었을 때 보이는 index.html, books.html, book.html,
+   js 폴더, images 폴더를 GitHub의 reason-essence 저장소 최상위에 올립니다.
+3. 같은 이름의 기존 파일은 덮어쓰기를 허용합니다.
+4. Commit changes를 누릅니다.
+5. GitHub Pages 반영 뒤 reason-essence.com/books.html에서 새 표지를 확인합니다.
+6. 이전 표지가 보이면 Ctrl+F5를 눌러 새로고침합니다.
+
+수정 파일
 - index.html
+- books.html
+- book.html
 - js/books-data.js
-- js/main.js
-- js/previews-data.js
-- images/books/why-east-no-science.webp
 
-주의: reason-essence 폴더 자체를 올리지 말고, 그 안의 파일과 js·images 폴더를 저장소 최상위에 올리세요.
+추가 표지 파일
+- images/books/boundary-science.webp
+- images/books/world-essence.webp
+- images/books/universe-pocket.webp
+- images/books/philosopher-manual.webp
+
+주의
+- reason-essence_표지4권_교체 폴더 자체를 저장소 안에 넣지 마세요.
+- 압축을 푼 뒤 그 안에 있는 파일과 폴더를 저장소 최상위에 올리세요.
+- 책 설명, 도서 순서, 홈페이지 대표 도서 구성은 변경하지 않았습니다.
