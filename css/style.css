@@ -711,17 +711,6 @@ section { padding: 88px 0; }
 
 /* ---------- Footer ---------- */
 
-.site-footer .foot-copy {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.footer-domain {
-  margin-top: 5px;
-}
-
 .site-footer {
   background: var(--color-navy);
   color: rgba(255,255,255,0.55);
@@ -1165,4 +1154,317 @@ body.preview-lock { overflow: hidden; }
   .preview-body { grid-template-columns: 1fr; }
   .preview-book { display: none; }
   .preview-page { padding: 26px 22px; }
+}
+
+/* =========================================================
+   출간 도서 · 서점 링크 (2026-08 추가)
+   ========================================================= */
+
+/* 홈 — 출간 도서 섹션 */
+.published-strip {
+  background: var(--color-bg);
+}
+
+/* 카드/행 링크 래핑 구조 변경에 따른 보정 */
+.book-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.book-card .book-card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  flex: 1 1 auto;
+}
+
+.book-card .cover,
+.book-row .cover {
+  position: relative;
+}
+
+.book-card .meta {
+  padding-bottom: 16px;
+}
+
+.card-actions {
+  padding: 0 18px 18px;
+}
+
+.card-actions .btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 9px 10px;
+  font-size: 13px;
+}
+
+.book-row {
+  position: relative;
+}
+
+.book-row .book-row-link {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 44px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.row-actions {
+  margin-top: 18px;
+  margin-left: 264px;
+}
+
+@media (max-width: 640px) {
+  .book-row .book-row-link { grid-template-columns: 130px 1fr; gap: 24px; }
+  .row-actions { margin-left: 154px; }
+}
+
+/* 출간 배지 */
+.pub-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  display: inline-block;
+  padding: 4px 10px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-navy);
+  background: var(--color-gold);
+  border: 1px solid var(--color-gold);
+  box-shadow: 0 4px 12px -6px rgba(19, 27, 46, 0.6);
+}
+
+.book-card.is-published .status,
+.book-row.is-published .status {
+  color: var(--color-navy);
+  font-weight: 600;
+}
+
+/* 구매하기 버튼 */
+.buy-btn {
+  cursor: pointer;
+  font-family: var(--font-sans);
+  background: var(--color-navy);
+  border-color: var(--color-navy);
+  color: var(--color-white);
+}
+
+.buy-btn:hover {
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+  color: var(--color-navy);
+}
+
+.buy-count {
+  display: inline-block;
+  margin-left: 7px;
+  padding: 1px 6px;
+  font-size: 10.5px;
+  line-height: 1.5;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.buy-btn:hover .buy-count {
+  background: rgba(19, 27, 46, 0.14);
+}
+
+/* 상세 페이지 */
+.detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.detail-stores {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.detail-stores-label {
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  color: var(--color-ink-soft);
+  margin-right: 4px;
+}
+
+.detail-stores a {
+  font-size: 13px;
+  padding: 6px 13px;
+  border: 1px solid var(--color-line);
+  background: var(--color-white);
+  color: var(--color-navy);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.detail-stores a:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+}
+
+/* 구매하기 모달 */
+.store-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.store-modal.open {
+  display: flex;
+}
+
+.store-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(19, 27, 46, 0.62);
+  backdrop-filter: blur(2px);
+}
+
+.store-panel {
+  position: relative;
+  width: min(420px, 100%);
+  background: var(--color-white);
+  border: 1px solid var(--color-line);
+  box-shadow: 0 30px 70px -30px rgba(19, 27, 46, 0.7);
+  padding: 34px 32px 28px;
+}
+
+.store-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  border: none;
+  background: none;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--color-ink-soft);
+  cursor: pointer;
+}
+
+.store-close:hover { color: var(--color-navy); }
+
+.store-kicker {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--color-gold);
+  margin-bottom: 10px;
+}
+
+.store-panel h3 {
+  font-size: 20px;
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+.store-sub {
+  font-size: 13px;
+  color: var(--color-ink-soft);
+  margin-bottom: 22px;
+}
+
+.store-links {
+  display: grid;
+  gap: 8px;
+}
+
+.store-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border: 1px solid var(--color-line);
+  background: var(--color-bg);
+  color: var(--color-navy);
+  text-decoration: none;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+.store-link:hover,
+.store-link:focus-visible {
+  border-color: var(--color-gold);
+  background: var(--color-white);
+  transform: translateX(2px);
+}
+
+.store-link em {
+  font-style: normal;
+  font-size: 12px;
+  color: var(--color-ink-soft);
+}
+
+.store-link:hover em { color: var(--color-gold); }
+
+.store-note {
+  margin: 18px 0 0;
+  font-size: 11.5px;
+  color: var(--color-ink-soft);
+  line-height: 1.6;
+}
+
+/* 보도자료 — 표지·서점 링크 */
+.press-item.has-cover {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.press-cover img {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border: 1px solid var(--color-line);
+}
+
+.press-stores {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.press-stores a {
+  font-size: 12.5px;
+  padding: 5px 12px;
+  border: 1px solid var(--color-line);
+  background: var(--color-white);
+  color: var(--color-navy);
+  text-decoration: none;
+}
+
+.press-stores a:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+}
+
+.press-more {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--color-gold);
+  text-decoration: none;
+}
+
+.press-more:hover { text-decoration: underline; }
+
+@media (max-width: 560px) {
+  .press-item.has-cover { grid-template-columns: 72px 1fr; gap: 16px; }
 }

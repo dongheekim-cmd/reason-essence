@@ -24,14 +24,32 @@ document.addEventListener("DOMContentLoaded", () => {
     toggle.addEventListener("click", () => nav.classList.toggle("open"));
   }
 
-  /* 홈 화면 — 대표 도서 4권 렌더링 */
+  /* 홈 화면 — 출간 도서 / 출간 예정 도서 렌더링 */
+  const publishedEl = document.getElementById("published-books");
+  const publishedSection = document.getElementById("published-section");
+  if (publishedEl && typeof BOOKS !== "undefined") {
+    const published = BOOKS.filter(isPublished).sort(byPubDateDesc);
+    if (published.length) {
+      publishedEl.innerHTML = published.map(bookCardHTML).join("");
+    } else if (publishedSection) {
+      publishedSection.style.display = "none";
+    }
+  }
+
   const featuredEl = document.getElementById("featured-books");
+  const featuredSection = document.getElementById("forthcoming-section");
   if (featuredEl && typeof BOOKS !== "undefined") {
     const featuredIds = ["wandering", "questioning-machine", "universe-pocket", "star-calculation"];
     const featured = featuredIds
       .map((id) => BOOKS.find((b) => b.id === id))
-      .filter(Boolean);
-    featuredEl.innerHTML = featured.map(bookCardHTML).join("");
+      .filter((b) => b && !isPublished(b));
+    const fill = BOOKS.filter((b) => !isPublished(b) && !featured.includes(b));
+    while (featured.length < 4 && fill.length) featured.push(fill.shift());
+    if (featured.length) {
+      featuredEl.innerHTML = featured.map(bookCardHTML).join("");
+    } else if (featuredSection) {
+      featuredSection.style.display = "none";
+    }
   }
 
   /* 도서목록 페이지 — 전체 렌더링 + 필터 + 보기 전환(진열형/목록형) */
@@ -59,7 +77,8 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    renderGrid(BOOKS);
+    currentList = sortPublishedFirst(BOOKS);
+    renderGrid(currentList);
 
     const filterBtns = document.querySelectorAll(".filter-bar button");
     filterBtns.forEach((btn) => {
@@ -67,11 +86,21 @@ document.addEventListener("DOMContentLoaded", () => {
         filterBtns.forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
         const cat = btn.dataset.filter;
-        currentList = cat === "all" ? BOOKS : BOOKS.filter((b) => b.category === cat);
+        const base =
+          cat === "all"
+            ? BOOKS
+            : cat === "출간"
+            ? BOOKS.filter(isPublished)
+            : BOOKS.filter((b) => b.category === cat);
+        currentList = sortPublishedFirst(base);
         renderGrid(currentList);
       });
     });
   }
+
+  /* 보도자료 페이지 */
+  const pressEl = document.getElementById("press-list");
+  if (pressEl) renderPress(pressEl);
 
   /* 도서 상세 페이지 — book.html?id=... */
   const detailEl = document.getElementById("book-detail");
@@ -94,34 +123,217 @@ document.addEventListener("DOMContentLoaded", () => {
     return typeof BOOK_IMAGES !== "undefined" && BOOK_IMAGES[b.id] ? BOOK_IMAGES[b.id] : "";
   }
 
+  /* ---------- 출간 / 서점 ---------- */
+
+  function storeList(b) {
+    if (!b || !b.stores || typeof STORES === "undefined") return [];
+    return STORES.filter((s) => (b.stores[s.key] || "").trim()).map((s) => ({
+      key: s.key,
+      label: s.label,
+      url: b.stores[s.key].trim()
+    }));
+  }
+
+  function isPublished(b) {
+    return !!(b && b.published);
+  }
+
+  function statusLabel(b) {
+    return isPublished(b) ? "출간" : b.status || "출간예정";
+  }
+
+  function formatDate(value) {
+    if (!value) return "";
+    const parts = String(value).split("-");
+    if (parts.length !== 3) return value;
+    return `${parts[0]}. ${Number(parts[1])}. ${Number(parts[2])}`;
+  }
+
+  function byPubDateDesc(a, b) {
+    return String(b.pubDate || "").localeCompare(String(a.pubDate || ""));
+  }
+
+  function sortPublishedFirst(list) {
+    const pub = list.filter(isPublished).sort(byPubDateDesc);
+    const rest = list.filter((b) => !isPublished(b));
+    return pub.concat(rest);
+  }
+
+  function publishedBadge(b) {
+    return isPublished(b) ? `<span class="pub-badge">출간</span>` : "";
+  }
+
+  function buyButtonHTML(b, variant) {
+    const stores = storeList(b);
+    if (!stores.length) return "";
+    const cls = variant === "solid" ? "btn solid buy-btn" : "btn buy-btn";
+    const count = stores.length > 1 ? `<span class="buy-count">${stores.length}</span>` : "";
+    return `<button type="button" class="${cls}" data-buy="${b.id}">구매하기${count}</button>`;
+  }
+
   function bookCardHTML(b) {
     return `
-      <a class="book-card-link" href="book.html?id=${b.id}">
-        <article class="book-card">
-          <div class="cover"><img src="${coverSrc(b)}" alt="${b.title} 표지" loading="lazy"></div>
+      <article class="book-card${isPublished(b) ? " is-published" : ""}">
+        <a class="book-card-link" href="book.html?id=${b.id}">
+          <div class="cover">
+            <img src="${coverSrc(b)}" alt="${b.title} 표지" loading="lazy">
+            ${publishedBadge(b)}
+          </div>
           <div class="meta">
-            <div class="status">${b.status}</div>
+            <div class="status">${statusLabel(b)}</div>
             <h3>${b.title}</h3>
             <div class="subtitle">${b.subtitle}</div>
             <p class="desc">${b.desc}</p>
           </div>
-        </article>
-      </a>`;
+        </a>
+        ${buyButtonHTML(b) ? `<div class="card-actions">${buyButtonHTML(b)}</div>` : ""}
+      </article>`;
   }
 
   function bookRowHTML(b) {
     return `
-      <a class="book-row-link" href="book.html?id=${b.id}">
-        <article class="book-row">
-          <div class="cover"><img src="${coverSrc(b)}" alt="${b.title} 표지" loading="lazy"></div>
+      <article class="book-row${isPublished(b) ? " is-published" : ""}">
+        <a class="book-row-link" href="book.html?id=${b.id}">
+          <div class="cover">
+            <img src="${coverSrc(b)}" alt="${b.title} 표지" loading="lazy">
+            ${publishedBadge(b)}
+          </div>
           <div class="info">
-            <div class="status">${b.status}</div>
+            <div class="status">${statusLabel(b)}</div>
             <h3>${b.title}</h3>
             <div class="subtitle">${b.subtitle}</div>
             <p class="desc">${b.desc}</p>
           </div>
-        </article>
-      </a>`;
+        </a>
+        ${buyButtonHTML(b) ? `<div class="row-actions">${buyButtonHTML(b)}</div>` : ""}
+      </article>`;
+  }
+
+  /* ---------- 구매하기 모달 ---------- */
+
+  function ensureStoreModal() {
+    let modal = document.getElementById("store-modal");
+    if (modal) return modal;
+    modal = document.createElement("div");
+    modal.id = "store-modal";
+    modal.className = "store-modal";
+    modal.setAttribute("aria-hidden", "true");
+    modal.innerHTML = `
+      <div class="store-backdrop" data-store-close></div>
+      <div class="store-panel" role="dialog" aria-modal="true" aria-labelledby="store-modal-title">
+        <button type="button" class="store-close" data-store-close aria-label="닫기">×</button>
+        <span class="store-kicker">전자책 구매</span>
+        <h3 id="store-modal-title"></h3>
+        <p class="store-sub"></p>
+        <div class="store-links"></div>
+        <p class="store-note">서점을 선택하시면 해당 서점의 상품 페이지가 새 창으로 열립니다.</p>
+      </div>`;
+    document.body.appendChild(modal);
+    modal.querySelectorAll("[data-store-close]").forEach((el) => {
+      el.addEventListener("click", closeStoreModal);
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && modal.classList.contains("open")) closeStoreModal();
+    });
+    return modal;
+  }
+
+  function openStoreModal(b) {
+    const stores = storeList(b);
+    if (!stores.length) return;
+    const modal = ensureStoreModal();
+    modal.querySelector("#store-modal-title").textContent = b.title;
+    modal.querySelector(".store-sub").textContent = b.subtitle || "";
+    modal.querySelector(".store-links").innerHTML = stores
+      .map(
+        (s) =>
+          `<a class="store-link" href="${s.url}" target="_blank" rel="noopener noreferrer"><span>${s.label}</span><em>바로가기 →</em></a>`
+      )
+      .join("");
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("preview-lock");
+    const first = modal.querySelector(".store-link");
+    if (first) first.focus();
+  }
+
+  function closeStoreModal() {
+    const modal = document.getElementById("store-modal");
+    if (!modal) return;
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("preview-lock");
+  }
+
+  document.addEventListener("click", (event) => {
+    const trigger = event.target.closest("[data-buy]");
+    if (!trigger || typeof BOOKS === "undefined") return;
+    event.preventDefault();
+    const book = BOOKS.find((b) => b.id === trigger.getAttribute("data-buy"));
+    if (book) openStoreModal(book);
+  });
+
+  /* ---------- 보도자료 ---------- */
+
+  function renderPress(container) {
+    const manual = typeof PRESS_ITEMS !== "undefined" ? PRESS_ITEMS.slice() : [];
+    const covered = new Set(manual.map((item) => item.bookId).filter(Boolean));
+    const auto =
+      typeof BOOKS === "undefined"
+        ? []
+        : BOOKS.filter(isPublished)
+            .filter((b) => !covered.has(b.id))
+            .map((b) => {
+              const stores = storeList(b);
+              return {
+                bookId: b.id,
+                date: b.pubDate || "",
+                title: `『${b.title}』 전자책 출간`,
+                body: `이성과 본질의 신간 『${b.title}』(부제: ${b.subtitle})이 전자책으로 출간되었습니다. ${b.desc}`,
+                stores: stores
+              };
+            });
+
+    const items = manual
+      .concat(auto)
+      .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
+
+    if (!items.length) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <h3>준비 중입니다</h3>
+          <p>이성과 본질의 첫 책들이 출간되면 이 페이지에 관련 보도자료와 소식을 순서대로 업데이트할 예정입니다.</p>
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = items
+      .map((item) => {
+        const book = typeof BOOKS !== "undefined" ? BOOKS.find((b) => b.id === item.bookId) : null;
+        const stores = item.stores && item.stores.length ? item.stores : storeList(book);
+        const links = stores.length
+          ? `<div class="press-stores">${stores
+              .map(
+                (s) =>
+                  `<a href="${s.url}" target="_blank" rel="noopener noreferrer">${s.label}</a>`
+              )
+              .join("")}</div>`
+          : "";
+        const cover = book && coverSrc(book) ? `<div class="press-cover"><img src="${coverSrc(book)}" alt="${book.title} 표지" loading="lazy"></div>` : "";
+        const more = book ? `<a class="press-more" href="book.html?id=${book.id}">도서 상세 보기 →</a>` : "";
+        return `
+          <div class="press-item${cover ? " has-cover" : ""}">
+            ${cover}
+            <div class="press-body">
+              <div class="date">${formatDate(item.date)}</div>
+              <h3>${item.title}</h3>
+              <p>${item.body}</p>
+              ${links}
+              ${more}
+            </div>
+          </div>`;
+      })
+      .join("");
   }
 
   function renderBookDetail() {
@@ -162,11 +374,29 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
         <div class="detail-info">
           <span class="pill">${b.category}</span>
-          <div class="status" style="margin-top:14px;">${b.status}</div>
+          <div class="status" style="margin-top:14px;">${statusLabel(b)}${
+      isPublished(b) && b.pubDate ? ` · ${formatDate(b.pubDate)}` : ""
+    }</div>
           <h1>${b.title}</h1>
           <div class="subtitle">${b.subtitle}</div>
           <p class="desc">${b.desc}</p>
-          <button type="button" class="btn preview-open" id="preview-open">책 미리보기</button>
+          <div class="detail-actions">
+            ${buyButtonHTML(b, "solid")}
+            <button type="button" class="btn preview-open" id="preview-open">책 미리보기</button>
+          </div>
+          ${
+            storeList(b).length
+              ? `<div class="detail-stores">
+                   <span class="detail-stores-label">구매처</span>
+                   ${storeList(b)
+                     .map(
+                       (s) =>
+                         `<a href="${s.url}" target="_blank" rel="noopener noreferrer">${s.label}</a>`
+                     )
+                     .join("")}
+                 </div>`
+              : ""
+          }
         </div>
       </div>
 
@@ -182,10 +412,14 @@ document.addEventListener("DOMContentLoaded", () => {
         </section>
 
         <section class="detail-section">
-          <h2>목차(안)</h2>
+          <h2>${isPublished(b) ? "목차" : "목차(안)"}</h2>
           ${
             tocHTML
-              ? `${tocHTML}<p class="toc-note">* 목차는 출간 전 최종 확정될 수 있습니다.</p>`
+              ? `${tocHTML}${
+                  isPublished(b)
+                    ? ""
+                    : `<p class="toc-note">* 목차는 출간 전 최종 확정될 수 있습니다.</p>`
+                }`
               : `<p>목차는 출간 준비 중 순차적으로 공개됩니다.</p>`
           }
         </section>
