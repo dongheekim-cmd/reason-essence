@@ -1,6 +1,6 @@
 /* 이성과 본질 — 공통 스크립트
    책 내용을 고치려면 js/books-data.js 파일만 수정하면 됩니다.
-   표지 이미지 데이터(js/books-images.js)는 손으로 수정하지 않아도 됩니다. */
+   표지 이미지는 images/books/ 폴더에 넣고 books-data.js의 image 항목에 경로를 적습니다. */
 
 document.addEventListener("DOMContentLoaded", () => {
   /* 로고 / 파비콘 적용 */
