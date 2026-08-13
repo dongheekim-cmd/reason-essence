@@ -320,6 +320,7 @@ const BOOKS = [
     published: false,
     pubDate: "",
     stores: { yes24: "", aladin: "", kyobo: "", ridi: "", millie: "" },
+    image: "images/books/hegel-myth.webp",
     desc: "철학의 신화 속에서 헤겔을 끌어내리다. 정신, 개념, 변증법, 절대정신이라는 사변 체계를 물리학자의 엄정한 시선으로 다시 심문한다.",
     intent: "절대정신과 변증법으로 대표되는 헤겔의 사변 체계를, 물리학자의 엄정한 검증의 시선으로 다시 들여다 본다. 철학의 신화를 걷어내고 그 위에 무엇이 남는지를 묻는 비판적 헤겔론이다.",
     audience: "헤겔 철학과 독일 관념론에 관심 있는 독자, 과학철학적 시선의 비판적 사유를 좋아하는 독자.",
