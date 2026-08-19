@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const pressEl = document.getElementById("press-list");
   if (pressEl) renderPress(pressEl);
 
-  /* 도서 상세 페이지 — book.html?id=... */
+  /* 도서 상세 페이지 — books/<id>.html (구 book.html?id=... 도 지원) */
   const detailEl = document.getElementById("book-detail");
   if (detailEl && typeof BOOKS !== "undefined") {
     renderBookDetail();
@@ -119,8 +119,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function coverSrc(b) {
-    if (b.image) return b.image;
-    return typeof BOOK_IMAGES !== "undefined" && BOOK_IMAGES[b.id] ? BOOK_IMAGES[b.id] : "";
+    const p = b.image
+      ? b.image
+      : typeof BOOK_IMAGES !== "undefined" && BOOK_IMAGES[b.id]
+      ? BOOK_IMAGES[b.id]
+      : "";
+    return p && !/^(https?:|\/)/.test(p) ? "/" + p : p;
   }
 
   /* ---------- 출간 / 서점 ---------- */
@@ -174,7 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function bookCardHTML(b) {
     return `
       <article class="book-card${isPublished(b) ? " is-published" : ""}">
-        <a class="book-card-link" href="book.html?id=${b.id}">
+        <a class="book-card-link" href="books/${b.id}.html">
           <div class="cover">
             <img src="${coverSrc(b)}" alt="${b.title} 표지" loading="lazy">
             ${publishedBadge(b)}
@@ -193,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function bookRowHTML(b) {
     return `
       <article class="book-row${isPublished(b) ? " is-published" : ""}">
-        <a class="book-row-link" href="book.html?id=${b.id}">
+        <a class="book-row-link" href="books/${b.id}.html">
           <div class="cover">
             <img src="${coverSrc(b)}" alt="${b.title} 표지" loading="lazy">
             ${publishedBadge(b)}
@@ -320,7 +324,7 @@ document.addEventListener("DOMContentLoaded", () => {
               .join("")}</div>`
           : "";
         const cover = book && coverSrc(book) ? `<div class="press-cover"><img src="${coverSrc(book)}" alt="${book.title} 표지" loading="lazy"></div>` : "";
-        const more = book ? `<a class="press-more" href="book.html?id=${book.id}">도서 상세 보기 →</a>` : "";
+        const more = book ? `<a class="press-more" href="books/${book.id}.html">도서 상세 보기 →</a>` : "";
         return `
           <div class="press-item${cover ? " has-cover" : ""}">
             ${cover}
@@ -338,7 +342,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderBookDetail() {
     const params = new URLSearchParams(location.search);
-    const id = params.get("id");
+    const id = params.get("id") || detailEl.getAttribute("data-book-id");
     const b = BOOKS.find((x) => x.id === id);
 
     if (!b) {
@@ -348,7 +352,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <p>주소가 올바른지 확인해주시거나, 도서목록에서 다시 선택해주세요.</p>
         </div>
         <div style="text-align:center; margin-top:32px;">
-          <a href="books.html" class="btn">도서목록으로 돌아가기</a>
+          <a href="/books.html" class="btn">도서목록으로 돌아가기</a>
         </div>`;
       document.title = "도서를 찾을 수 없습니다 | 이성과 본질";
       return;
@@ -426,7 +430,7 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
 
       <div style="text-align:center; margin-top:56px;">
-        <a href="books.html" class="btn">← 도서목록으로 돌아가기</a>
+        <a href="/books.html" class="btn">← 도서목록으로 돌아가기</a>
       </div>
 
       <div class="cover-lightbox" id="cover-lightbox" aria-hidden="true">
