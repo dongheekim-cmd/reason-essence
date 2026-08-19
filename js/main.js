@@ -190,7 +190,6 @@ document.addEventListener("DOMContentLoaded", () => {
             <p class="desc">${b.desc}</p>
           </div>
         </a>
-        ${buyButtonHTML(b) ? `<div class="card-actions">${buyButtonHTML(b)}</div>` : ""}
       </article>`;
   }
 
@@ -209,7 +208,6 @@ document.addEventListener("DOMContentLoaded", () => {
             <p class="desc">${b.desc}</p>
           </div>
         </a>
-        ${buyButtonHTML(b) ? `<div class="row-actions">${buyButtonHTML(b)}</div>` : ""}
       </article>`;
   }
 
