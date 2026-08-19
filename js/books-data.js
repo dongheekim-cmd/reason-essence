@@ -85,7 +85,7 @@ const BOOKS = [
     pubDate: "2026-08-12",
     stores: {
       yes24:  "https://www.yes24.com/product/goods/195102894",
-      aladin: "",
+      aladin: "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=400619585",
       kyobo:  "https://ebook-product.kyobobook.co.kr/dig/epd/ebook/E000013422689",
       ridi:   "",
       millie: ""
@@ -160,7 +160,7 @@ const BOOKS = [
     pubDate: "2026-08-12",
     stores: {
       yes24:  "https://www.yes24.com/product/goods/195102893",
-      aladin: "",
+      aladin: "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=400619593",
       kyobo:  "https://ebook-product.kyobobook.co.kr/dig/epd/ebook/E000013422548",
       ridi:   "",
       millie: ""
@@ -185,7 +185,7 @@ const BOOKS = [
     pubDate: "2026-08-12",
     stores: {
       yes24:  "https://www.yes24.com/product/goods/195102892",
-      aladin: "",
+      aladin: "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=400619598",
       kyobo:  "https://ebook-product.kyobobook.co.kr/dig/epd/ebook/E000013422690",
       ridi:   "",
       millie: ""
@@ -231,7 +231,7 @@ const BOOKS = [
     pubDate: "2026-08-12",
     stores: {
       yes24:  "https://www.yes24.com/product/goods/195102897",
-      aladin: "",
+      aladin: "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=400619596",
       kyobo:  "https://ebook-product.kyobobook.co.kr/dig/epd/ebook/E000013422688",
       ridi:   "",
       millie: ""
@@ -258,7 +258,7 @@ const BOOKS = [
     pubDate: "2026-08-12",
     stores: {
       yes24:  "https://www.yes24.com/product/goods/195102895",
-      aladin: "",
+      aladin: "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=400619603",
       kyobo:  "https://ebook-product.kyobobook.co.kr/dig/epd/ebook/E000013422691",
       ridi:   "",
       millie: ""
@@ -391,16 +391,7 @@ const BOOKS = [
      · 보도자료 페이지에 출간 소식이 한 건 올라갑니다.
    ─────────────────────────────────────────────────────────────
 
-   ■ 알라딘 등재되면 — 아래 다섯 자리의 "" 안에 주소만 채우면 끝입니다.
-     (각 책의 stores 블록에서 aladin: "" 을 찾아 붙여 넣으세요)
-     알라딘 상품 주소 형태: https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=000000000
-
-       wandering            · 끝나지 않는 방랑              → aladin: ""
-       world-essence        · 세계는 본질이 있는가          → aladin: ""
-       star-calculation     · 칸트는 왜 뉴턴을 필요로 했는가 → aladin: ""
-       questioning-machine  · 존재를 묻는 기계              → aladin: ""
-       universe-pocket      · 주머니 속의 우주              → aladin: ""
-
+   ■ 알라딘 주소는 2026-08-19 기준으로 다섯 종 모두 채워 넣었습니다.
      리디·밀리의 서재도 입점되면 같은 방식으로 ridi / millie 를 채우면 됩니다.
      STORES 배열의 순서(예스24 → 알라딘 → 교보문고 → 리디 → 밀리)대로 표시됩니다.
 
