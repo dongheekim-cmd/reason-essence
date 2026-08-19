@@ -385,7 +385,6 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="subtitle">${b.subtitle}</div>
           <p class="desc">${b.desc}</p>
           <div class="detail-actions">
-            ${buyButtonHTML(b, "solid")}
             <button type="button" class="btn preview-open" id="preview-open">책 미리보기</button>
           </div>
           ${
