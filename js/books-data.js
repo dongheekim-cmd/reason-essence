@@ -300,7 +300,7 @@ const BOOKS = [
   {
     id: "plato-nietzsche",
     title: "플라톤의 정답에 니체는 망치를 들었다",
-    subtitle: "대화편의 이성과 아포리즘의 망치가 격돌하는 2천 년의 철학 전쟁",
+    subtitle: "플라톤의 이성과 니체의 아포리즘이 격돌하는 철학 전쟁",
     category: "철학",
     status: "출간예정",
     published: false,
