@@ -382,9 +382,6 @@ section { padding: 88px 0; }
 /* ---------- Book detail (books page: alternating rows) ---------- */
 
 .book-row {
-  display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 44px;
   padding: 44px 0;
   border-bottom: 1px solid var(--color-line);
 }
@@ -438,7 +435,6 @@ section { padding: 88px 0; }
 }
 
 @media (max-width: 640px) {
-  .book-row { grid-template-columns: 130px 1fr; gap: 24px; }
   .book-row .info h3 { font-size: 19px; }
 }
 
