@@ -163,10 +163,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return pub.concat(rest);
   }
 
-  function publishedBadge(b) {
-    return isPublished(b) ? `<span class="pub-badge">출간</span>` : "";
-  }
-
   function buyButtonHTML(b, variant) {
     const stores = storeList(b);
     if (!stores.length) return "";
@@ -181,7 +177,6 @@ document.addEventListener("DOMContentLoaded", () => {
         <a class="book-card-link" href="books/${b.id}.html">
           <div class="cover">
             <img src="${coverSrc(b)}" alt="${b.title} 표지" loading="lazy">
-            ${publishedBadge(b)}
           </div>
           <div class="meta">
             <div class="status">${statusLabel(b)}</div>
@@ -199,7 +194,6 @@ document.addEventListener("DOMContentLoaded", () => {
         <a class="book-row-link" href="books/${b.id}.html">
           <div class="cover">
             <img src="${coverSrc(b)}" alt="${b.title} 표지" loading="lazy">
-            ${publishedBadge(b)}
           </div>
           <div class="info">
             <div class="status">${statusLabel(b)}</div>
