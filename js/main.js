@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function statusLabel(b) {
-    return isPublished(b) ? "출간" : b.status || "출간예정";
+  return isPublished(b) ? "출간" : "출간 예정";
   }
 
   function formatDate(value) {
