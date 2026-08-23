@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const featuredEl = document.getElementById("featured-books");
   const featuredSection = document.getElementById("forthcoming-section");
   if (featuredEl && typeof BOOKS !== "undefined") {
-    const featuredIds = ["wandering", "questioning-machine", "universe-pocket", "star-calculation"];
+    const featuredIds = ["why-east-no-science", "plato-nietzsche", "wandering", "questioning-machine"];
     const featured = featuredIds
       .map((id) => BOOKS.find((b) => b.id === id))
       .filter((b) => b && !isPublished(b));
@@ -159,7 +159,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function sortPublishedFirst(list) {
     const pub = list.filter(isPublished).sort(byPubDateDesc);
-    const rest = list.filter((b) => !isPublished(b));
+    const forthcomingPriority = ["why-east-no-science", "plato-nietzsche"];
+    const rest = list
+      .filter((b) => !isPublished(b))
+      .sort((a, b) => {
+        const aRank = forthcomingPriority.indexOf(a.id);
+        const bRank = forthcomingPriority.indexOf(b.id);
+        if (aRank === -1 && bRank === -1) return 0;
+        if (aRank === -1) return 1;
+        if (bRank === -1) return -1;
+        return aRank - bRank;
+      });
     return pub.concat(rest);
   }
 
