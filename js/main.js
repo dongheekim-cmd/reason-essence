@@ -39,7 +39,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const featuredEl = document.getElementById("featured-books");
   const featuredSection = document.getElementById("forthcoming-section");
   if (featuredEl && typeof BOOKS !== "undefined") {
+<<<<<<< HEAD
     const featuredIds = ["slow-gaze", "hegel-myth", "shining-thought", "intellectual-revolutions"];
+=======
+    const featuredIds = ["why-east-no-science", "plato-nietzsche", "wandering", "questioning-machine"];
+>>>>>>> cd462c06d4aee53f249b53e78dc3bbf68f8756e0
     const featured = featuredIds
       .map((id) => BOOKS.find((b) => b.id === id))
       .filter((b) => b && !isPublished(b));
@@ -143,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function statusLabel(b) {
-    return isPublished(b) ? "출간" : b.status || "출간예정";
+  return isPublished(b) ? "출간" : "출간 예정";
   }
 
   function formatDate(value) {
@@ -159,12 +163,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function sortPublishedFirst(list) {
     const pub = list.filter(isPublished).sort(byPubDateDesc);
-    const rest = list.filter((b) => !isPublished(b));
+    const forthcomingPriority = ["why-east-no-science", "plato-nietzsche"];
+    const rest = list
+      .filter((b) => !isPublished(b))
+      .sort((a, b) => {
+        const aRank = forthcomingPriority.indexOf(a.id);
+        const bRank = forthcomingPriority.indexOf(b.id);
+        if (aRank === -1 && bRank === -1) return 0;
+        if (aRank === -1) return 1;
+        if (bRank === -1) return -1;
+        return aRank - bRank;
+      });
     return pub.concat(rest);
-  }
-
-  function publishedBadge(b) {
-    return isPublished(b) ? `<span class="pub-badge">출간</span>` : "";
   }
 
   function buyButtonHTML(b, variant) {
@@ -181,7 +191,6 @@ document.addEventListener("DOMContentLoaded", () => {
         <a class="book-card-link" href="books/${b.id}.html">
           <div class="cover">
             <img src="${coverSrc(b)}" alt="${b.title} 표지" loading="lazy">
-            ${publishedBadge(b)}
           </div>
           <div class="meta">
             <div class="status">${statusLabel(b)}</div>
@@ -199,7 +208,6 @@ document.addEventListener("DOMContentLoaded", () => {
         <a class="book-row-link" href="books/${b.id}.html">
           <div class="cover">
             <img src="${coverSrc(b)}" alt="${b.title} 표지" loading="lazy">
-            ${publishedBadge(b)}
           </div>
           <div class="info">
             <div class="status">${statusLabel(b)}</div>
