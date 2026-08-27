@@ -39,11 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const featuredEl = document.getElementById("featured-books");
   const featuredSection = document.getElementById("forthcoming-section");
   if (featuredEl && typeof BOOKS !== "undefined") {
-<<<<<<< HEAD
     const featuredIds = ["slow-gaze", "hegel-myth", "shining-thought", "intellectual-revolutions"];
-=======
-    const featuredIds = ["why-east-no-science", "plato-nietzsche", "wandering", "questioning-machine"];
->>>>>>> cd462c06d4aee53f249b53e78dc3bbf68f8756e0
     const featured = featuredIds
       .map((id) => BOOKS.find((b) => b.id === id))
       .filter((b) => b && !isPublished(b));
@@ -128,7 +124,14 @@ document.addEventListener("DOMContentLoaded", () => {
       : typeof BOOK_IMAGES !== "undefined" && BOOK_IMAGES[b.id]
       ? BOOK_IMAGES[b.id]
       : "";
-    return p && !/^(https?:|\/)/.test(p) ? "/" + p : p;
+    if (!p || /^(https?:|\/)/.test(p)) return p;
+    /* 서버에 올린 상태에서는 사이트 루트 기준 절대경로,
+       폴더에서 파일을 그냥 열어 볼 때(file://)는 상대경로를 씁니다.
+       올리기 전에 로컬에서 확인할 때도 표지가 보이도록 하기 위한 처리입니다. */
+    if (location.protocol === "file:") {
+      return /\/books\//.test(location.pathname) ? "../" + p : p;
+    }
+    return "/" + p;
   }
 
   /* ---------- 출간 / 서점 ---------- */
