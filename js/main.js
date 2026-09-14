@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const featuredEl = document.getElementById("featured-books");
   const featuredSection = document.getElementById("forthcoming-section");
   if (featuredEl && typeof BOOKS !== "undefined") {
-    const featuredIds = ["slow-gaze", "hegel-myth", "shining-thought", "intellectual-revolutions"];
+    const featuredIds = ["shining-thought", "scientist-aristotle", "boundary-science", "practical-reason"];
     const featured = featuredIds
       .map((id) => BOOKS.find((b) => b.id === id))
       .filter((b) => b && !isPublished(b));
