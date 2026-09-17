@@ -243,8 +243,8 @@ const BOOKS = [
   },
   {
     id: "practical-reason",
-    title: "실천이성의 귀환",
-    subtitle: "이익의 시대에 도덕을 다시 세우는 법",
+    title: "도덕이 나라를 세운다",
+    subtitle: "이익의 시대, 시민의 도덕성으로 공동체를 다시 세우는 법",
     category: "인문교양",
     status: "출간예정",
     published: false,
@@ -318,7 +318,7 @@ const BOOKS = [
   {
     id: "philosopher-manual",
     title: "철학자의 인생 매뉴얼",
-    subtitle: "혼자 있으면 외롭고 함께 있으면 괴로운 이들을 위한 25가지 처세술",
+    subtitle: "흔들리는 삶을 위한 25가지 철학의 질문",
     category: "인문교양",
     status: "출간예정",
     published: false,
