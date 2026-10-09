@@ -174,7 +174,13 @@ const BOOKS = [
     status: "출간",
     published: true,
     pubDate: "2026-09-22",
-    stores: { yes24: "", aladin: "", kyobo: "", ridi: "", millie: "" },
+    stores: {
+      yes24:  "https://www.yes24.com/product/goods/196681466",
+      aladin: "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=402564132",
+      kyobo:  "https://ebook-product.kyobobook.co.kr/dig/epd/ebook/E000013592375",
+      ridi:   "",
+      millie: ""
+    },
     image: "images/books/shining-thought.webp",
     desc: "소크라테스에서 에르되시까지, 철학자와 과학자 30여 명의 생애를 21개의 장으로 따라간다. 업적의 이름 뒤에 가려진 재판과 질병, 협업과 책임, 공로의 배분을 되살린 생각과 삶의 역사.",
     intent: "역사는 복잡한 발견을 몇 개의 이름과 문장으로 압축해 기억합니다. 업적이 교과서의 정리와 공식으로 굳어지는 동안 그것을 만든 사람이 겪은 재판과 질병, 협업과 돌봄, 정치적 선택은 기록에서 빠져나갔습니다. 이 책은 박해와 질병, 자살과 공로 누락을 하나의 '천재의 비극'으로 묶지 않고, 사건마다 작동한 제도와 조건을 구분해 업적을 더 온전하게 이해하고자 합니다.",
@@ -253,8 +259,8 @@ const BOOKS = [
     pubDate: "2026-09-28",
     stores: {
       yes24:  "https://www.yes24.com/product/goods/197075708",
-      aladin: "",
-      kyobo:  "",
+      aladin: "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=403322311",
+      kyobo:  "https://ebook-product.kyobobook.co.kr/dig/epd/ebook/E000013631272",
       ridi:   "",
       millie: ""
     },
@@ -430,10 +436,16 @@ const BOOKS = [
     title: "지적 혁명의 순간들",
     subtitle: "주제 중심으로 다시 쓴 과학사",
     category: "과학",
-    status: "출간예정",
-    published: false,
-    pubDate: "",
-    stores: { yes24: "", aladin: "", kyobo: "", ridi: "", millie: "" },
+    status: "출간",
+    published: true,
+    pubDate: "2026-10-06",
+    stores: {
+      yes24:  "https://www.yes24.com/product/goods/197317521",
+      aladin: "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=403724903",
+      kyobo:  "https://ebook-product.kyobobook.co.kr/dig/epd/ebook/E000013657435",
+      ridi:   "",
+      millie: ""
+    },
     image: "images/books/intellectual-revolutions.webp",
     desc: "연대순으로 나열된 과학사 대신, 관찰과 실재·통합과 보존·파동과 입자·화살과 흐름이라는 네 개의 물음으로 다시 엮은 32장의 결정적 순간들. 망원경에서 블랙홀까지, 인간의 시선이 어떻게 세계를 다시 그려왔는지를 따라간다.",
     intent: "이 책은 과학사를 인물과 연대순으로 나열하지 않습니다. 대신 관찰과 실재, 통합과 보존, 파동과 입자, 화살과 흐름이라는 네 가지 물음을 축으로 삼아 물리학의 결정적 순간들을 다시 배열합니다. 같은 인물이 여러 부에 걸쳐 다른 얼굴로 등장하는 것도 이 때문입니다 — 뉴턴은 통합의 설계자이면서 동시에 빛을 알갱이로 고집한 사람이기도 합니다. 사건의 순서보다 인간의 시선이 넓어지고 깊어져 온 과정 자체를 보여주는 것이 이 책의 목표입니다.",
