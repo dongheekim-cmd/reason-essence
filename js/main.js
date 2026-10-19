@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const featuredEl = document.getElementById("featured-books");
   const featuredSection = document.getElementById("forthcoming-section");
   if (featuredEl && typeof BOOKS !== "undefined") {
-    const featuredIds = ["reason-regret", "platonist", "sad-philosophy", "science-philosophy-world"];
+    const featuredIds = ["natural-science-understanding", "reason-regret", "platonist", "sad-philosophy"];
     const featured = featuredIds
       .map((id) => BOOKS.find((b) => b.id === id))
       .filter((b) => b && !isPublished(b));
