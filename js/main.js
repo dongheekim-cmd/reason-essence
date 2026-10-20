@@ -24,11 +24,19 @@ document.addEventListener("DOMContentLoaded", () => {
     toggle.addEventListener("click", () => nav.classList.toggle("open"));
   }
 
-  /* 홈 화면 — 출간 도서 / 출간 예정 도서 렌더링 */
+  /* 홈 화면 — 신간 / 출간 예정 도서 렌더링 */
   const publishedEl = document.getElementById("published-books");
   const publishedSection = document.getElementById("published-section");
   if (publishedEl && typeof BOOKS !== "undefined") {
-    const published = BOOKS.filter(isPublished).sort(byPubDateDesc);
+    const NEW_RELEASE_LIMIT = 4; // 신간: 출간일이 최근인 순으로 최대 4권
+    const newReleaseTieOrder = ["hegel-myth"]; // 출간일이 같을 때 앞에 둘 책
+    const tieRank = (x) => {
+      const i = newReleaseTieOrder.indexOf(x.id);
+      return i === -1 ? newReleaseTieOrder.length : i;
+    };
+    const published = BOOKS.filter(isPublished)
+      .sort((a, b) => byPubDateDesc(a, b) || tieRank(a) - tieRank(b))
+      .slice(0, NEW_RELEASE_LIMIT);
     if (published.length) {
       publishedEl.innerHTML = published.map(bookCardHTML).join("");
     } else if (publishedSection) {
