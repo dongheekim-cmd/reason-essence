@@ -432,11 +432,11 @@ document.addEventListener("DOMContentLoaded", () => {
         </section>
 
         <section class="detail-section">
-          <h2>${isPublished(b) ? "목차" : "목차(안)"}</h2>
+          <h2>${isPublished(b) || b.tocFinal ? "목차" : "목차(안)"}</h2>
           ${
             tocHTML
               ? `${tocHTML}${
-                  isPublished(b)
+                  isPublished(b) || b.tocFinal
                     ? ""
                     : `<p class="toc-note">* 목차는 출간 전 최종 확정될 수 있습니다.</p>`
                 }`
